@@ -11,9 +11,13 @@ run :
 
 	docker-compose up -d
 
+down:
+
+	docker-compose down
+
 mongo_shell :
 
 	docker exec -it mongo bash
-	mongo -u root -p root
-	help
-
+# once logged inside the database shell:
+# mongo -u root -p root
+# type :  "help" to see the available commands
