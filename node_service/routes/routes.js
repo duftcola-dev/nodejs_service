@@ -10,16 +10,22 @@ router.use( async function(req,res,next){
 
 
 router
-.route("/user")
+.route("/user/new")
 .post(async (req,res)=>{
-    res.send("user-aknowledge");
+    let = body_params=["user","password"];
+    let valid = true;
+    if ( await utils.has_required_body_params(body_params,req) == false){
+        res=utils.create_response(404,{"error" : "missing params"},res);
+        valid = false;
+        res.send();
+    }
+    if (valid == true){
+        res=utils.create_response(200,req.body,res);
+        res.send();
+    }
+    // add user to database
+    
 });
 
-
-router
-.route("/save")
-.post(async (req,res)=>{
-    res.send("save-aknowledge");
-});
 
 module.exports = router;
