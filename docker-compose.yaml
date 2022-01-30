@@ -1,0 +1,58 @@
+version : "3.9"
+
+networks:
+  services_network:
+    name: services_network
+  default:
+    name: default_network
+
+services:
+
+  node :
+    image: robin/node_service:latest
+    container_name : node_service
+    restart: always
+    ports : 
+      - 3000:3000
+    networks:
+      - services_network
+
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - ./mongo_volume:/mongodb
+    container_name: mongo
+    restart : always
+    ports:
+      - 27017:27017
+    environmet:
+      - MONGO_INITDB_ROOT_USERNAME: root
+      - MONGO_INITDB_ROOT_PASSWORD: root
+    networks:
+      - services_network
+
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name : mongo_express_db
+    restart : always
+    ports:
+      - 8081:8081
+    volumes:
+      - ./mongo_volume:/mongodb_express
+    environmet:
+      - ME_CONFIG_BASICAUTH_USERNAME : robin
+      - ME_CONFIG_BASICAUTH_PASSWORD : robin123
+      - ME_CONFIG_MONGODB_ADMINUSERNAME : root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD : root
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN : true
+      - ME_CONFIG_MONGODB_PORT : 8081
+      - ME_CONFIG_MONGODB_SERVER : "mongo"
+      - ME_CONFIG_OPTIONS_EDITORTHEME : "default"
+      - ME_CONFIG_SITE_BASEURL : "localhost://mongo_e:8081/"
+      - ME_CONFIG_SITE_SESSIONSECRET : "mongosession"
+      - ME_CONFIG_REQUEST_SIZE : 1000kb
+    networks:
+      -services_network
+
