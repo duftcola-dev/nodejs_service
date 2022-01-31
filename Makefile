@@ -4,6 +4,7 @@ build :
 	cd ./node_service ; npm i express
 	cd ./node_service ; npm install --save express-session
 	cd ./node_service ; npm install --save express-handlebars
+	cd ./node_service ; npm install -g mongo-express
 	docker build -t robin/node_service:latest ./node_service
 	docker-compose build
 
