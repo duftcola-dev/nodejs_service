@@ -1,0 +1,282 @@
+** This is a manual intended for the local installadio of mongodb and mongo express using docker
+
+Basic creation of docker-compose file for mongo and mongo express : 
+mongo is database based on key:value 
+mongo-express is a browser CLI to manage the mongo database as well a drive for accessing
+mongo db by node-express.
+
+services:
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - ./mongo_volume:/mongodb
+    container_name: mongo
+    restart : always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    networks:
+      - services_network
+
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name : mongo_express_db
+    restart : always
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_MONGODB_SERVER=mongo
+    networks:
+      - services_network
+
+
+#How to access mongo db.
+
+- once the docker-compose container is up you can access the database  by 
+ 
+    docker exec -it mongo bash
+
+- once the mongosh is initialized you can log into admin by :
+
+    mongo -u root -p root
+
+    **this user and password are specified in the docker-compose file 
+    - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+    - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+
+------------------------------------------------------------------------------
+
+#All the following commands are executed inside the mongosh cli
+
+#Create a database in mongo :
+
+    user <database_name>
+
+#Create a colletion + inserting data:
+
+    <database_name>.<collection_name>.insertOne({key : value})
+
+#Check if the collection exists or if the name given is valid : 
+
+    <database_name>.getCollection("some_name").find()
+
+    <database_name>.getCollection.find() ** will return all the documents in the whole collection
+
+    <database_name>.<collection_name>.find( { title: "The Favourite" } )
+
+    **where title: "The Favourite" is a key : value of an item :
+    example --> 
+
+                {
+                    title: "The Favourite",
+                    genres: [ "Drama", "History" ],
+                    runtime: 121,
+                    rated: "R",
+                    year: 2018
+                }
+
+    **use filters 
+    db.movies.find( { rated: { $in: [ "PG", "PG-13" ] } } )
+    **find all the items in collection movies where the sub-item rated == "PG" or "PG13"
+
+    ** use "," as AND operator to search items in collection where (countries = ""  and  "imdb.rating" = "")
+    db.movies.find( { countries: "Mexico", "imdb.rating": { $gte: 7 } } )
+
+    ** use or operator to find items by year = 2010 or ("awards.wins": = 5  and genres = "Drama")
+    db.movies.find( {
+     year: 2010,
+     $or: [ { "awards.wins": { $gte: 5 } }, { genres: "Drama" } ]
+    } )
+
+#Insert data :
+
+    db.collection.insertOne({key : value}) **insert one item
+    db.collection.insertMany([item,item2,item3]) ** insert and array of json items 
+
+#Update items / documents:
+
+    db.collection.updateOne( { title: "Tag" }, ** select item by title
+    $set: { plot: "something more"}            ** set the plot fiedl to its new value
+    { $currentDate: { lastUpdated: true } }     ** update additional fields 
+    })
+
+#Update many items :
+
+    db.collection.updateMany( { security_deposit: { $lt: 100 } },{$set: { security_deposit: 100, minimum_nights: 1 }} )
+    ** select all items where security_deposit = 100  and set security_deposit =  100, minimum_nights = 1 
+
+#Delete item / collection
+
+    db.movies.deleteMany( { title: "Titanic" } ) **delete all items where title = Titanic
+
+    db.movies.deleteOne( { cast: "Brad Pitt" } ) ** delete one item where cast = Brad Pitt
+
+
+------------------------------------------------------------------------------------------------------
+
+
+#Mongosh commands 
+
+    mongo <command>
+
+    --help                  Returns information on the options and use of the MongoDB Shell.
+
+    --nodb                  Prevents the shell from connecting to any database instances.
+
+    --norc                  Prevents the shell from sourcing and evaluating ~/.mongoshrc.js on startup.
+
+    --quiet                 Skips all messages during startup (such as welcome messages and startup warnings) and goes directly to the prompt.
+
+    --shell                 Enables the shell interface
+
+    --version               Show version
+
+    --host <hostname>       Specifies and redefines the connection host
+
+    --port <port>           Specifies and redefines the connection port
+
+    --tls                   Enables connection to a mongod or mongos that has TLS SSL support enabled.
+
+#Mongosh commands + #Create databases that require authentication
+
+    --username <username>, -u <username>   Specifies a username with which to authenticate to a MongoDB database that uses authentication.
+
+    --password <password>, -p <password>   Specifies a password with which to authenticate to a MongoDB database that uses authentication. 
+
+    --authenticationMechanism <name>       Specifies the authentication database where the specified --username has been created.
+
+    --authenticationMechanism <name>       Specifies the authentication mechanism the MongoDB Shell uses to authenticate to the mongod or mongos.
+
+    When you add a user, you create the user in a specific database. The database you create the user in is the authentication database for the user.
+    However, a user's privileges are not limited to their authentication database. Therefore, a user can have privileges across different databases. 
+    For more information on roles, see Role-Based Access Control.
+
+#How to create a user :
+
+    1 )switch to the admin database
+    2 )add the myUserAdmin user with the userAdminAnyDatabase and readWriteAnyDatabase roles":
+
+    use admin
+    db.createUser(
+    {
+    user: "myUserAdmin",
+    pwd: passwordPrompt(), // or cleartext password
+    roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+      { role: "readWriteAnyDatabase", db: "admin" }
+    ]
+    }
+    )
+
+    ***The userAdminAnyDatabase role allows this user to:
+        -> create users
+        -> grant or revoke roles from users
+        -> create or modify customs roles
+
+    3) db.adminCommand( { shutdown: 1 } ) **restart the database
+    4) exit mongosh
+    5) Start mongosh with access control enabled:
+
+        mongo -u myUserAdmin -p password_added_previously
+
+    6) use.some_database ** This is the database the user will have access to initially
+
+    7) db.createUser({
+                user: "myTester",
+                pwd:  passwordPrompt(),   // or cleartext password
+                roles: [ { role: "readWrite", db: "some_database" },{ role: "read", db: "reporting" } ] ** Specifies the databases this use has permissions to
+                })
+
+    8) exit mongosh
+
+    9) Connect as the new user : 
+
+        mongo -u myTester -p myTester_password
+
+    10 ) Check the authentication works 
+
+        use some_database
+        db.auth("myTester", passwordPrompt())
+
+
+#Check registered users 
+
+    use admin
+    db.system.users.find()
+
+    #############################################################
+
+    db.help() *** commands on a database level
+
+    getMongo                Returns the current database connection
+
+    getCollectionNames      Returns an array containing the names of
+                            all collections in the current database.
+
+    getCollectionInfos      Returns an array of documents with
+                            collection information, i.e. collection
+                            name and options, for the current
+                            database.
+
+    runCommand              Runs an arbitrary command on the
+                            database.
+
+    adminCommand            Runs an arbitrary command against the
+                            admin database.
+
+    aggregate               Runs a specified admin/diagnostic
+                            pipeline which does not require an
+                            underlying collection.
+
+    getSiblingDB            Returns another database without
+                            modifying the db variable in the shell
+                            environment.
+
+    getCollection           Removes the current database, deleting
+                            the associated data files.
+
+    dropDatabase            Removes the current database, deleting
+                            the associated data files.
+
+    db.adminCommand.help()  To see help for a specific database method
+
+    #############################################################################
+
+    db.collection.help() ***  commands on a collection level
+
+    aggregate               Calculates aggregate values for the
+                            data in a collection or a view.
+
+    bulkWrite               Performs multiple write operations
+                            with controls for order of execution.
+
+    count                   Returns the count of documents that
+                            would match a find() query for the
+                            collection or view.
+
+    countDocuments          Returns the count of documents that
+                            match the query for a collection or view.
+
+    deleteMany              Removes all documents that match the
+                            filter from a collection.
+
+    deleteOne               Removes a single document from a
+                          collection.
+
+    distinct                Finds the distinct values for a specified
+                            field across a single collection or view
+                            and returns the results in an array.
+
+    estimatedDocumentCount  Returns the count of all documents in a
+                            collection or view.
+
+    find                    Selects documents in a collection or view.
+
+

@@ -6,8 +6,6 @@ const fs = require("fs");
 const router = require("./routes/routes");
 const hostname = os.hostname();
 const homedir = os.homedir();
-const mongo_express = require("mongo_express/lib/middleware");
-const mongo_express_config = require("./mongo_express_config") 
 const port  = process.env.port || 3000;
 
 const app = express();

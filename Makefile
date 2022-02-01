@@ -2,6 +2,7 @@ build :
 	cd ./node_service ; npm init -y
 	cd ./node_service ; npm install
 	cd ./node_service ; npm i express
+	cd ./node_service ; npm install --save mongodb
 	cd ./node_service ; npm install --save express-session
 	cd ./node_service ; npm install --save express-handlebars
 	cd ./node_service ; npm install -g mongo-express
@@ -22,3 +23,5 @@ mongo_shell :
 # once logged inside the database shell:
 # mongo -u root -p root
 # type :  "help" to see the available commands
+# use mongo --nodb  to activate the mongosh shell
+
