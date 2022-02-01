@@ -59,17 +59,26 @@ services:
 
     user <database_name>
 
-#Create a colletion + inserting data:
+#Show the available databases
 
-    <database_name>.<collection_name>.insertOne({key : value})
+    show dbs 
+
+#Select a database 
+
+    use <database_name>
+
+
+#Create a colletion + inserting data in the selected database:
+
+    db.<collection_name>.insertOne({key : value})
 
 #Check if the collection exists or if the name given is valid : 
 
-    <database_name>.getCollection("some_name").find()
+    db.getCollection("some_name").find()
 
-    <database_name>.getCollection.find() ** will return all the documents in the whole collection
+    db.getCollection.find() ** will return all the documents in the whole collection
 
-    <database_name>.<collection_name>.find( { title: "The Favourite" } )
+    db.<collection_name>.find( { title: "The Favourite" } )
 
     **where title: "The Favourite" is a key : value of an item :
     example --> 

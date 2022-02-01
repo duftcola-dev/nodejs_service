@@ -1,0 +1,11 @@
+{
+    "appPort" : 3000,
+    "appHost": "localhost",
+    "dbPort" : "27017",
+    "dbHost": "localhost",
+    "dbWrite" : "wuser",
+    "dbWriterPassw" : "wuser123",
+    "dbReader" : "ruser",
+    "dbReaderPassw": "ruser123",
+    "secret":"qwew123uhiu123iuihis87s8a"    
+}
