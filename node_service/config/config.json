@@ -1,11 +1,14 @@
 {
-    "appPort" : 3000,
-    "appHost": "localhost",
-    "dbPort" : "27017",
-    "dbHost": "localhost",
-    "dbWrite" : "wuser",
-    "dbWriterPassw" : "wuser123",
-    "dbReader" : "ruser",
-    "dbReaderPassw": "ruser123",
-    "secret":"qwew123uhiu123iuihis87s8a"    
+    "app_port" : 3000,
+    "app_host": "localhost",
+    "db_port" : "27017",
+    "db_host": "localhost",
+    "mongo_service":"mongodb",
+    "db_admin":"mongoadmin",
+    "db_admin_p":"k7y3yu7gufybu7tfgufysb73tugi%h83Q3!=sahsd_%Fa1",
+    "db_write" : "writer",
+    "db_write_p" : "lahkd7yi73ghka7tigri7a3iaiga",
+    "db_read" : "reader",
+    "db_read_p": "au6stduga63ugi7ai28hi7gua6wge",
+    "secret":"qwerty123uhiu123iuihis87s8a"    
 }

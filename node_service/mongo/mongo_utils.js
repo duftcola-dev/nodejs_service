@@ -1,63 +1,72 @@
 const { MongoClient } = require("mongodb");
-const uri = "mongodb://root:root@localhost:27017/";
-const CONFIG = require("../index/CONFIG");
 
-async function check_connection(){
-    let client = null;
-    let result = false;
+
+async function connect_client(permition_type){
     try{
+        let uri = "";
+        if (permition_type == "write"){//"mongodb://user:user_password@localhost:27017/"
+            uri = CONFIG.mongo_service+"://"+CONFIG.db_write+":"+CONFIG.db_write_p+"@"+CONFIG.db_host+":"+CONFIG.db_port+"/";
 
-    client =await MongoClient.connect(uri);
-    await client.db("admin").command({ ping: 1 });
-    console.log("Connected successfully to server");
-    result = true;    
-    }catch (err){
-        console.log("Error , cannot connect to databse");
-    }finally{
-        await client.close();
-        return result;
-    }
-}
+        }
+        if (permition_type == "read"){
+            uri = CONFIG.mongo_service+"://"+CONFIG.db_read+":"+CONFIG.db_read_p+"@"+CONFIG.db_host+":"+CONFIG.db_port+"/";
+        }
 
-async function insert_one(database,collection,data){
-    let result = null;
-    let client = null;
-    try{
-        client =await MongoClient.connect(uri);
-        const _database  = client.db(database);
-        const _collection = _database.collection(collection);
-        const query = data;
-        result = await _collection.insertOne(query);
+        console.log(uri);
+        mongo_client = new MongoClient(uri,{ useUnifiedTopology: true })
+        let client =  mongo_client.connect(uri);
+        if (MongoClient.isConnected() == false){throw "Error : connect_client --> cannot connect to database!";}
+        return client
+
     }catch (err){
-        console.log("Error : Cannot access database")
-        result = -1;
-    }finally{
-        client.close()
-        return result;
+        return null;
     }
 }
 
 
-async function find(database,collection,data){
+async function get_cursor(client,database,collection){
+    const _database  = client.db(database);
+    const _collection = _database.collection(collection);
+    return _collection;
+}
+
+
+async function insert_one(database,collection,query){
     let result = null;
-    let client = null;
+    let client =null;
     try{
-        client =await MongoClient.connect(uri);
-        const _database  = client.db(database);
-        const _collection = _database.collection(collection);
-        const query = data;
-        result = await _collection.findOne(query);
+        client = await connect_client("write");
+        let cursor = await get_cursor(client,database,collection);
+        result = await cursor.insertOne(query);
+        client.close()
     }catch (err){
         console.log("Error : Cannot access database")
         result = -1;
-    }finally{
         client.close()
+    }finally{
+        return result;
+    }
+}
+
+
+async function find(database,collection,query){
+    let result = null;
+    let client = null;
+    try{
+        client = await connect_client("read");
+        let cursor =await get_cursor(client,database,collection);
+        result = await cursor.findOne(query);
+        client.close()
+    }catch (err){
+        console.log("Error : Cannot access database")
+        result = -1;
+        client.close()
+    }finally{
         return result;
     }
 }
 
 module.exports = {
-    check_connection,
     find,
-    insert_one
+    insert_one,
 }
