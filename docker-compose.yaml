@@ -1,28 +1,18 @@
-version : "3.9"
+version : "3.8"
 
 networks:
   services_network:
     name: services_network
   default:
     name: default_network
-
+    
 services:
-
-  node :
-    image: robin/node_service:latest
-    container_name : node_service
-    restart: always
-    ports : 
-      - 3000:3000
-    networks:
-      - services_network
-
-
-  mongo:
+  mongodb:
     image: mongo:latest
     volumes:
-      - ./mongo_volume:/mongodb
-    container_name: mongo
+      - ./mongo_volume:/data/db
+      - ./mongo_volume/log:/var/log/mongodb
+    container_name: mongodb
     restart : always
     ports:
       - 27017:27017
@@ -33,9 +23,9 @@ services:
       - services_network
 
 
-  mongo-express:
+  mongo_express:
     image: mongo-express:latest
-    container_name : mongo_express_db
+    container_name : mongo_express
     restart : always
     ports:
       - 8081:8081
@@ -47,3 +37,6 @@ services:
     networks:
       - services_network
 
+volumes:
+  microservices_mongo_volume:
+    driver: local

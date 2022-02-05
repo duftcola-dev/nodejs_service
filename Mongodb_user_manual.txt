@@ -209,7 +209,10 @@ services:
     4) exit mongosh
     5)Once the userAdmin has been created start mongosh with access control enabled:
 
-        mongo -u myUserAdmin -p password_added_previously
+        mongosh -u <myUserAdmin> -p <password_added_previously> -authenticationDatabase <database_name_user_has_access_to>
+
+        **you can avoid adding the -authenticationDatabase by creating the user in the admin database and in fact
+        this is easiest and advisable way to do it
 
     6) use.some_database ** This is the database the user will have access to initially
 

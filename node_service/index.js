@@ -8,7 +8,7 @@ const hostname = os.hostname();
 const port  = CONFIG.app_port;
 
 const router = require("./routes/routes");
-const mongo_client = require("./mongo/mongo_utils");
+
 
 
 
@@ -16,7 +16,7 @@ const mongo_client = require("./mongo/mongo_utils");
 const app = express();
 
 app.route("/").get(async (req,res)=>{
-        let result= await mongo_client.find("users","user",{test:"ok"});
+        let result= await CLIENT.find("users","user",{test:"ok"});
         res.statusCode = 200;
         res.json(result);
         res.send() 

@@ -15,7 +15,7 @@ function create_response(status,data,res){
 }
 
 
-function has_required_body_params(params,req){
+async function has_required_body_params(params,req){
     let data = req.body;
     let result = true;
     try{
@@ -33,10 +33,9 @@ function has_required_body_params(params,req){
 }
 
 
-function has_required_query_params(params,req){
-    let url_params = URLSearchParams(req.url);
-    for (param in params){
-        if (url_params.has(params[param])==false){
+async function has_required_query_params(params,req){
+    for (item in params){
+        if (req.query[params[item]] == null){
             return false;
         }
     }

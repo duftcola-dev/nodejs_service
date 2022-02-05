@@ -7,6 +7,8 @@ build :
 	cd ./node_service ; npm install --save express-handlebars
 	cd ./node_service ; npm install -g mongo-express
 	cd ./node_service ; npm install --save nodemon
+	cd ./node_service ; npm install --save hasha
+	mkdir /mongo_volume/logs
 	docker build -t robin/node_service:latest ./node_service
 	docker-compose build
 
