@@ -45,11 +45,17 @@ services:
 
 - once the mongosh is initialized you can log into admin by :
 
-    mongo -u root -p root
+    mongosh -u root -p root
 
     **this user and password are specified in the docker-compose file 
     - ME_CONFIG_MONGODB_ADMINUSERNAME=root
     - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+
+#Access mongodb form js 
+
+    const uri = "mongodb://user:password@localhost:27017/";
+    ** until more users are created user and password are the ones defined in docker-compose
+    ** it is highly advisable to add more users with different privileges
 
 ------------------------------------------------------------------------------
 
@@ -183,25 +189,48 @@ services:
     ]
     }
     )
+    example : 
+
+        db.createUser(
+                    {
+                    user: "mongoadmin",
+                    pwd: "k7y3yu7gufybu7tfgufysb73tugi%h83Q3!=sahsd_%Fa1",
+                    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+                    })
 
     ***The userAdminAnyDatabase role allows this user to:
         -> create users
         -> grant or revoke roles from users
         -> create or modify customs roles
 
+    *** use db.getUsers(); the see all the users in your db
+
     3) db.adminCommand( { shutdown: 1 } ) **restart the database
     4) exit mongosh
-    5) Start mongosh with access control enabled:
+    5)Once the userAdmin has been created start mongosh with access control enabled:
 
-        mongo -u myUserAdmin -p password_added_previously
+        mongosh -u <myUserAdmin> -p <password_added_previously> -authenticationDatabase <database_name_user_has_access_to>
+
+        **you can avoid adding the -authenticationDatabase by creating the user in the admin database and in fact
+        this is easiest and advisable way to do it
 
     6) use.some_database ** This is the database the user will have access to initially
 
-    7) db.createUser({
+    7)  db.createUser({
                 user: "myTester",
                 pwd:  passwordPrompt(),   // or cleartext password
                 roles: [ { role: "readWrite", db: "some_database" },{ role: "read", db: "reporting" } ] ** Specifies the databases this use has permissions to
                 })
+
+    
+    The default roles you can choose are :
+         *read
+         *readWrite
+         *dbAdmin
+         *dbOwner
+         *userAdmin
+         *clusterAdmin
+         *clusterManager
 
     8) exit mongosh
 
@@ -214,6 +243,9 @@ services:
         use some_database
         db.auth("myTester", passwordPrompt())
 
+#Drop(remove) users
+
+    db.dropUser(<user_name>)
 
 #Check registered users 
 

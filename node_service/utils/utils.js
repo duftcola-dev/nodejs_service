@@ -15,6 +15,21 @@ function create_response(status,data,res){
 }
 
 
+async function is_iterable(array){
+    try{
+        let count = 0;
+        for(item in array){
+            count = count+1;
+            if (count > 1){
+                break
+            }
+        }
+        return true;
+    }catch(err){
+        return false;
+    }
+}
+
 async function has_required_body_params(params,req){
     let data = req.body;
     let result = true;
@@ -47,5 +62,6 @@ async function has_required_query_params(params,req){
 module.exports={
     create_response,
     has_required_query_params,
-    has_required_body_params
+    has_required_body_params,
+    is_iterable
     };

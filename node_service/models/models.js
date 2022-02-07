@@ -3,7 +3,8 @@ const hasha = require("hasha");
 class user_model{
     constructor(user,pwd){
         this.user_name=user;
-        this.user_password = this.generate_sig(pwd);
+        this.user_password = pwd;
+        this.sig = this.generate_sig(user,pwd)
         this.literal_registry_date = get_literal_date();
         this.iso_date=this.get_iso_date();
         this.int_date=this.get_int_date();
@@ -31,6 +32,7 @@ class user_model{
         let data={
             "user_name": this.user_name,
             "user_password": this.user_password,
+            "sig":this.sig,
             "literal_registry_date": this.literal_registry_date,
             "iso_date": this.iso_date,
             "int_date": this.int_date,
@@ -39,8 +41,8 @@ class user_model{
         return data;
     }
 
-    generate_sig(pwd){
-        let sig = pwd+CONFIG.secret;
+    generate_sig(user,pwd){
+        let sig = user+pwd;
         sig =  hasha(sig);
         return sig;
     }

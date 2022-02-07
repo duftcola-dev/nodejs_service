@@ -1,4 +1,5 @@
 const  MongoClient  = require("mongodb").MongoClient;
+const utils = require("../utils/utils")
 
 
 async function get_client_credentials(permition_type){
@@ -16,13 +17,6 @@ async function get_client_credentials(permition_type){
     }catch (err){
         return null;
     }
-}
-
-
-async function get_cursor(client,database,collection){
-    const _database  = client.db(database);
-    const _collection = _database.collection(collection);
-    return _collection;
 }
 
 async function get_client(uri){
@@ -59,8 +53,44 @@ async function insert_one(database,collection,query){
     }
 }
 
+async function insert_many(database,collection,query){
+    let result = null;
+    let client = null;
+    try{
+        if(await utils.is_iterable(query)==false){
+            throw "insert_many error --> query must be an array";
+        }
+        let credentials = await get_client_credentials("write");
+        let client = await get_client(credentials);
+        result = await client.db(database).collection(collection).insertMany(query);
+    }catch(err){
+        console.log(err);
+        if (client != null){
+            client.close();
+        }
+        return null;
+    }
+}
 
-async function find_all(database,collection,query){
+async function find_one(database,collection,query){
+    let result = null;
+    let client = null;
+    try{
+        let credentials = await get_client_credentials("read");
+        let client = await get_client(credentials);
+        result = await client.db(database).collection(collection).findOne(query);
+        client.close();
+        return result;
+    }catch(err){
+        console.log(err);
+        if (client != null){
+            client.close();
+        }
+        return null;
+    }
+}
+
+async function find_all(database,collection){
     let result = null;
     let client = null;
     try{
@@ -79,7 +109,51 @@ async function find_all(database,collection,query){
     }
 }
 
+async function delete_all(database,collection){
+    let result = null;
+    let client = null;
+    try{
+        let credentials = await get_client_credentials("write");
+        let client = await get_client(credentials);
+        result = await client.db(database).collection(collection).deleteMany({});
+        console.log(JSON.stringify(result));
+        client.close();
+        return result.deletedCount;
+    }catch(err){
+        console.log(err);
+        if (client != null){
+            client.close();
+        }
+        return null;
+    }
+}
+
+async function delete_one(database,collection,query){
+    let result = null;
+    let client = null;
+    try{
+        let credentials = await get_client_credentials("write");
+        let client = await get_client(credentials);
+        result = await client.db(database).collection(collection).deleteOne(query);
+        console.log(JSON.stringify(result));
+        client.close();
+        return result;
+    }catch(err){
+        console.log(err);
+        if (client != null){
+            client.close();
+        }
+        return null;
+    }
+}
+
+
+
 module.exports = {
     find_all,
     insert_one,
+    insert_many,
+    find_one,
+    delete_all,
+    delete_one
 }

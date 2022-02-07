@@ -9,9 +9,10 @@ networks:
 services:
   mongodb:
     image: mongo:latest
+    user: root 
     volumes:
       - ./mongo_volume:/data/db
-      - ./mongo_volume/log:/var/log/mongodb
+      - ./mongo_volume/logs:/var/logs/mongodb
     container_name: mongodb
     restart : always
     ports:
