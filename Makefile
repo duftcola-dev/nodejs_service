@@ -12,6 +12,7 @@ build :
 	cd ./node_service ; npm install -g mongo-express
 	cd ./node_service ; npm install --save nodemon
 	cd ./node_service ; npm install --save hasha
+	- rm -r mongo_volume
 	mkdir ./mongo_volume
 	mkdir ./mongo_volume/logs
 	docker build -t robin/node_service:latest ./node_service
