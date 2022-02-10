@@ -3,7 +3,6 @@ const mongo_client = require("../mongo/mongo");
 const models = require("../models/models");
 const router = express.Router();
 const utils = require("../utils/utils");
-const { async } = require("hasha");
 const model_factory = new models.model_factory();
 
 router.use( async function(req,res,next){
@@ -21,8 +20,9 @@ router
 });
 
 router
-.route("user/find/one").post( async (req,res)=>{
+.route("/user/find/one").post( async (req,res)=>{
     let required_params=["user_name"];
+    let valid = true;
     if (await utils.has_required_body_params(required_params,req)==false){
         res=utils.create_response(412,{"error" : "missing params"},res);
         valid = false;
@@ -30,7 +30,8 @@ router
     }
     if(valid == true){
         let user_name=req.body["user_name"];
-        let result = await mongo_client.find_one({"user_name":user_name});
+        console.log(user_name);
+        let result = await mongo_client.find_one("users","user",{"user_name":user_name});
         res = utils.create_response(200,result,res);
         res.send();
     }
@@ -89,8 +90,6 @@ router
         res.send();
     }
 });
-
-
 
 
 module.exports = router;
