@@ -13,6 +13,7 @@ install :
 	cd ./node_service ; npm install -g nodemon
 	cd ./node_service ; npm install --save hasha
 	cd ./node_service ; npm install --save uuid
+	cd ./node_service ; npm install --save nodemailer
 	- mkdir ./mongo_volume
 	- mkdir ./mongo_volume/logs
 	docker build -t robin/node_service:latest ./node_service

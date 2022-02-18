@@ -11,8 +11,8 @@ router.use( async function(req,res,next){
 
 
 router
-.route("/user/find/users").get( async (req,res)=>{
-    let result =await mongo_client.find_all("users","user",{});
+.route("/find/users").get( async (req,res)=>{
+    let result =await mongo_client.find_all(CONFIG.db["users"]["db"],CONFIG.db["users"]["c_user"],{});
     res.json(result);
     res.send();
 });

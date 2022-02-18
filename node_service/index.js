@@ -18,7 +18,8 @@ app.route("/").get(async (req,res)=>{
 })
 
 app.use(express.json()); 
-app.use("/node_service/"+CONFIG.api_key+"/register/",users);
+app.use("/node_service/"+CONFIG.api_key+"/users/",users);
+app.use("/node_service/"+CONFIG.api_key+"/admin/",db);
 
 app.listen(port , err =>{
     console.log("Server started host:"+hostname+" | port:"+port);
