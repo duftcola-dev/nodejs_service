@@ -45,17 +45,17 @@ mongo_shell :
 
 install_flask :
 
-	docker build -t robin/flask_service:latest ./flask_service
-	docker run  -d -p 5000:5000 --name flask_service  robin/flask_service
+	cd ./flask_service ; docker build -t robin/flask_service:latest ./flask_service
+	cd ./flask_service ; docker run  -d -p 5000:5000 --name flask_service  robin/flask_service
 
 run_flask : 
 
-	docker start flask_service
+	cd ./flask_service ; docker start flask_service
 	
 
 down_flask :
 
-	docker stop flask_service
+	cd ./flask_service ; docker stop flask_service
 
 show:
 
