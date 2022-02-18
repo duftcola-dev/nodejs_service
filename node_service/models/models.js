@@ -1,17 +1,5 @@
-const hasha = require("hasha");
 const uuidv4 = require("uuid")
-class Encryption{
 
-    constructor(){}
-
-    get_sig(data){
-        return hasha(data);
-    }
-
-    get_uuid(){
-        return uuidv4();
-    }
-}
 
 
 class ai_model extends Encryption{
@@ -35,10 +23,11 @@ class ai_model extends Encryption{
 
 
 class user_model extends Encryption{
-    constructor(user,pwd){
+    constructor(user,pwd,email){
+        this.id = this.get_user_id()
         this.user_name=user;
         this.user_password = pwd;
-        this.sig = this.get_sig(user+pdw);
+        this.email = email
         this.literal_registry_date = this.get_literal_date();
         this.iso_date=this.get_iso_date();
         this.int_date=this.get_int_date();
@@ -62,11 +51,16 @@ class user_model extends Encryption{
         return result;
     }
 
+    get_user_id(){
+        return uuidv4.v4()
+    }
+
     get_data(){
         let data={
+            "user_id": this.id,
             "user_name": this.user_name,
             "user_password": this.user_password,
-            "sig":this.sig,
+            "user_email":this.email,
             "literal_registry_date": this.literal_registry_date,
             "iso_date": this.iso_date,
             "int_date": this.int_date,
@@ -83,7 +77,7 @@ class model_factory{
 
     constructor(){};
 
-    create_user_model(user,pwd) {
+    create_user_model(user,pwd,email) {
        return new user_model(user,pwd);
     }
 
