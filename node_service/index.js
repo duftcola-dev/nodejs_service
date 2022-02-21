@@ -1,5 +1,4 @@
 const express = require("express");
-
 const os = require("os");
 const http = require("http");
 global.CONFIG = require("./config/config.json")
@@ -7,12 +6,8 @@ const fs = require("fs");
 const hostname = os.hostname();
 const port  = CONFIG.app_port;
 
-const router = require("./routes/routes");
-
-
-
-
-
+const users = require("./routes/users");
+const db = require("./routes/db");
 const app = express();
 
 app.route("/").get(async (req,res)=>{
@@ -23,7 +18,8 @@ app.route("/").get(async (req,res)=>{
 })
 
 app.use(express.json()); 
-app.use("/node_service",router);
+app.use("/node_service/"+CONFIG.api_key+"/users/",users);
+app.use("/node_service/"+CONFIG.api_key+"/admin/",db);
 
 app.listen(port , err =>{
     console.log("Server started host:"+hostname+" | port:"+port);

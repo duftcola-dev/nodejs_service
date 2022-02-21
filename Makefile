@@ -13,9 +13,11 @@ install :
 	cd ./node_service ; npm install -g nodemon
 	cd ./node_service ; npm install --save hasha
 	cd ./node_service ; npm install --save uuid
+	cd ./node_service ; npm install --save nodemailer
 	- mkdir ./mongo_volume
 	- mkdir ./mongo_volume/logs
 	docker build -t robin/node_service:latest ./node_service
+	docker build -t robin/flask_service:latest ./flask_service
 	docker-compose build
 	chmod -R 777 ./mongo_volume
 	touch .gitignore
@@ -40,8 +42,23 @@ mongo_shell :
 
 	docker exec -it mongodb bash 
 	
-# once logged inside the database shell:
-# mongo -u root -p root
-# type :  "help" to see the available commands
-# use mongo --nodb  to activate the mongosh shell
 
+
+install_flask :
+
+	cd ./flask_service ; docker build -t robin/flask_service:latest ./flask_service
+	cd ./flask_service ; docker run  -d -p 5000:5000 --name flask_service  robin/flask_service
+
+run_flask : 
+
+	cd ./flask_service ; docker start flask_service
+	
+
+down_flask :
+
+	cd ./flask_service ; docker stop flask_service
+
+show:
+
+	docker ps
+	docker ps -a
