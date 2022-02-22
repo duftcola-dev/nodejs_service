@@ -17,7 +17,6 @@ install :
 	- mkdir ./mongo_volume
 	- mkdir ./mongo_volume/logs
 	docker build -t robin/node_service:latest ./node_service
-	docker build -t robin/flask_service:latest ./flask_service
 	docker-compose build
 	chmod -R 777 ./mongo_volume
 	touch .gitignore

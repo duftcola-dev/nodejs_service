@@ -34,7 +34,14 @@ db.createUser(
         pwd:"au6stduga63ugi7ai28hi7gua6wge",
         roles :[ {role : "read",db: "users"} ]
     })
-    
+
+use tokens
+db.active.insertOne({
+    "sig":1,
+    "created":iso_format_date,
+    "expires" :iso_format_date(hours-min-secons),
+}) 
+ 
 exit
 
 exit
