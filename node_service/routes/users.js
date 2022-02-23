@@ -22,7 +22,6 @@ router
     }
     if(valid == true){
         let user_token = req.body["token"];
-        
         let result = await mongo_client.find_one(CONFIG["tokens"]["db"],CONFIG["tokens"]["c_active"],{"token":user_token});
         if (result != null){
             res = utils.create_response(200,{"access_granted":true},res);

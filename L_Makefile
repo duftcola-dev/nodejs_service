@@ -1,5 +1,3 @@
-#git ignore content 
-#ignore  mongo_volume
 VAR_GIT_IGNORE_CONTENT = mongo_volume/
 
 install :
