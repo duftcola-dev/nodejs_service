@@ -14,7 +14,7 @@ class Encryption{
     }
 }
 
-class user_login extends Encryption{
+class access_model extends Encryption{
 
     constructor(user,pwd){
         super();
@@ -75,6 +75,6 @@ class user_model extends Encryption{
 }
 
 module.exports ={
-    user_login,
+    access_model,
     user_model
 }
