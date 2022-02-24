@@ -14,15 +14,15 @@
     "api_key":"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
     "mail":"duftcoladev@gmail.com",
     "mail_p":"pythontestservice",
-    "exp":1800, 
+    "exp":1200, 
     "db":{
         "users":{
-            "db":"users",
-            "c_user":"user"
+            "id":"users",
+            "user":"user"
         },
         "tokens":{
-            "db":"tokens",
-            "c_active":"active"
+            "id":"tokens",
+            "active":"active"
         }
         
     }

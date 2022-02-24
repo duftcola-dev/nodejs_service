@@ -72,6 +72,14 @@ class user_model extends Encryption{
         }
         return data;
     }
+
+    get_database(){
+        return CONFIG["db"]["users"]["id"];
+    }
+    get_collection(name){
+        return CONFIG["db"]["users"][name];
+
+    }
 }
 
 module.exports ={

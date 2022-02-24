@@ -1,6 +1,6 @@
 const uuidv4 = require("uuid");
 const hasha = require("hasha");
-
+const jsonwebtoken = require("jsonwebtoken");
 
 class token_model{
 
@@ -19,27 +19,53 @@ class token_model{
     }
 
     creation_date(){
-        let d=new Date();
-        let result = Number(d.getFullYear()+""+d.getMonth()+""+d.getDay()+""+d.getSeconds());
+        let result = Math.floor(Date.now() / 1000);
         return result;
     }
 
     exp_date(){
-        let d=new Date();
-        let result = Number(d.getFullYear()+""+d.getMonth()+""+d.getDay()+""+d.getSeconds());
-        result = result + CONFIG["exp"];
+        let result = Math.floor(Date.now() / 1000) + CONFIG["exp"];
         return result;
     }
     
     get_data(){
-        data = {
+        new_jwt = jsonwebtoken.sign(
+            {
+            "token":this.token,
+            "iat":this.creation_date(),
+            "exp":this.exp_date()
+            },CONFIG["secret"]);
+        token = {
             "sig" : this.sig,
             "token" : this.token,
-            "crt" : this.crt,
+            "iat" : this.crt,
             "exp" : this.exp
-        }
+        };
+        data = {
+            "token" : token,
+            "jwt" : new_jwt
+
+        };
         return data;
     }
+
+    get_database(){
+        return CONFIG["db"]["tokens"]["id"];
+    }
+
+    get_collection(name){
+        CONFIG["db"]["tokens"][name];
+    }
+
+    refresh_jwt(data){
+        let refesh_token = jsonwebtoken.sign({
+            "token":data["token"],
+            "iat":data["iat"],
+            "exp":data["exp"]
+            },CONFIG["secret"]);
+        return refesh_token;
+    }
+
 }
 
 module.exports = {
