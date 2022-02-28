@@ -13,8 +13,7 @@ class token_model{
     }
 
     create_token(data){
-        
-        uuid = uuidv4.v4();
+        let uuid = uuidv4.v4();
         return hasha(data+uuid);
     }
 
@@ -24,24 +23,24 @@ class token_model{
     }
 
     exp_date(){
-        let result = Math.floor(Date.now() / 1000) + CONFIG["exp"];
+        let result = Math.floor(Date.now() / 1000) + CONFIG["exp"]*60;
         return result;
     }
     
     get_data(){
-        new_jwt = jsonwebtoken.sign(
+        let new_jwt = jsonwebtoken.sign(
             {
             "token":this.token,
             "iat":this.creation_date(),
             "exp":this.exp_date()
             },CONFIG["secret"]);
-        token = {
+        let token = {
             "sig" : this.sig,
             "token" : this.token,
             "iat" : this.crt,
             "exp" : this.exp
         };
-        data = {
+        let data = {
             "token" : token,
             "jwt" : new_jwt
 
@@ -54,10 +53,10 @@ class token_model{
     }
 
     get_collection(name){
-        CONFIG["db"]["tokens"][name];
+        return CONFIG["db"]["tokens"][name];
     }
 
-    refresh_jwt(data){
+    resend_jwt(data){
         let refesh_token = jsonwebtoken.sign({
             "token":data["token"],
             "iat":data["iat"],

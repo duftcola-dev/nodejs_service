@@ -70,18 +70,21 @@ router
     if(valid == true){
         let user_name = req.body["user_name"];
         let user_pwd = req.body["user_pwd"];
+
         let user_model = model_factory.create_user_model(user_name,user_pwd,"placeholder");
-        let access_model = model_factory.create_access_model(user_name,user_pwd);
         let user_db = user_model.get_database();
-        let user_col = user_model.get_collection("user");
+        let user_col = user_model.get_collection("user");   
+
+        let access_model = model_factory.create_access_model(user_name,user_pwd);
         let sig = access_model.get_data();
-        let query = {"sig":sig};
+        
+       
         let new_token_model = model_factory.create_token_model(sig);
         let token_db = new_token_model.get_database();
         let token_col = new_token_model.get_collection("active");
 
+        let query = {"sig":sig};
         let result = await mongo_client.find_one(user_db,user_col,query);
-
         if (result != null){//user exists
             let current_token = await mongo_client.find_one(token_db,token_col,query);
             if (current_token != null){//user has an active token
@@ -99,8 +102,9 @@ router
                         }
                     }
                 }else{//token is not expired
-                    let data = await mongo_client.find_one(user_db,user_col,query);
-                    let jwt = new_token_model.refresh_jwt(data);
+                    let data = await mongo_client.find_one(token_db,token_col,query);
+                    console.log(data);
+                    let jwt = new_token_model.resend_jwt(data);
                     res = utils.create_response(200,{"data":jwt},res);
                 }
             }else{// user doesnt have a token therefore create  one

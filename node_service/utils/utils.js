@@ -60,7 +60,7 @@ async function has_required_query_params(params,req){
 
 async function is_token_expired(IEEE_time_POSIX){
     let exp = Math.floor(Date.now() / 1000);
-    if(iso_format_data > exp){
+    if(IEEE_time_POSIX > exp){
         return true
     }
     return false
