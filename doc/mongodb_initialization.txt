@@ -25,21 +25,22 @@ db.createUser(
     {
         user:"writer",
         pwd:"lahkd7yi73ghka7tigri7a3iaiga",
-        roles :[ {role : "readWrite",db: "users"} ]
+        roles :[ {role : "readWrite",db: "users"},{role:"readWrite",db:"tokens"} ]
     })
 
 db.createUser(
     {
         user:"reader",
         pwd:"au6stduga63ugi7ai28hi7gua6wge",
-        roles :[ {role : "read",db: "users"} ]
+        roles :[ {role : "read",db: "users"},{role:"read",db:"tokens"} ]
     })
 
 use tokens
 db.active.insertOne({
-    "sig":1,
-    "created":iso_format_date,
-    "expires" :iso_format_date(hours-min-secons),
+    "sig" : 1,
+    "token":1,
+    "iat":1,
+    "exp" :1,
 }) 
  
 exit

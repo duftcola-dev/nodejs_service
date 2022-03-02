@@ -2,7 +2,7 @@ const express = require("express");
 
 
 function create_response(status,data,res){
-    let available_status=[200,201,404,412,503];
+    let available_status=[200,201,404,412,503,422];
     res.header("content-type : json");
     res.contentType("json")
     
@@ -57,6 +57,8 @@ async function has_required_query_params(params,req){
     return true;
     
 }
+
+
 
 
 module.exports={
