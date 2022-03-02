@@ -2,17 +2,18 @@ VAR_GIT_IGNORE_CONTENT = mongo_volume/
 
 install :
 	cd ./node_service ; npm init -y 
-	cd ./node_service ; npm install
-	cd ./node_service ; npm i express
+	cd ./node_service ; npm install --save express
 	cd ./node_service ; npm install --save mongodb
 	cd ./node_service ; npm install --save express-session
 	cd ./node_service ; npm install --save express-handlebars
-	cd ./node_service ; npm install -g mongo-express
-	cd ./node_service ; npm install -g nodemon
+	cd ./node_service ; npm install --save mongo-express
+	cd ./node_service ; npm install --save nodemon
 	cd ./node_service ; npm install --save hasha
 	cd ./node_service ; npm install --save uuid
 	cd ./node_service ; npm install --save nodemailer
 	cd ./node_service ; npm install --save jsonwebtoken
+	cd ./node_service ; npm install -g npm-check-updates
+	cd ./node_service ; npm install
 	- mkdir ./mongo_volume
 	- mkdir ./mongo_volume/logs
 	docker build -t robin/node_service:latest ./node_service
@@ -20,6 +21,10 @@ install :
 	chmod -R 777 ./mongo_volume
 	touch .gitignore
 	@echo \$(VAR_GIT_IGNORE_CONTENT)\ > ./.gitignore
+	cd ./node_service ; ncu -u
+	cd ./node_service ; ncu -g
+	cd ./node_service ; npm install
+
 
 develop : 
 

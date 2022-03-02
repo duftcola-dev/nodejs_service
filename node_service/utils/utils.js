@@ -58,13 +58,6 @@ async function has_required_query_params(params,req){
     
 }
 
-async function is_token_expired(IEEE_time_POSIX){
-    let exp = Math.floor(Date.now() / 1000);
-    if(IEEE_time_POSIX > exp){
-        return true
-    }
-    return false
-}
 
 
 
@@ -72,6 +65,5 @@ module.exports={
     create_response,
     has_required_query_params,
     has_required_body_params,
-    is_iterable,
-    is_token_expired,
+    is_iterable
     };
