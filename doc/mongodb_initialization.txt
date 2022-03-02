@@ -37,9 +37,9 @@ db.createUser(
 
 use tokens
 db.active.insertOne({
-    "sig":1,
-    "created":iso_format_date,
-    "expires" :iso_format_date(hours-min-secons),
+    "token":1,
+    "iat":iso_format_date,
+    "exp" :iso_format_date(hours-min-secons),
 }) 
  
 exit
