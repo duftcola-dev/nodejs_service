@@ -102,8 +102,8 @@ class token_model{
         let new_jwt = jsonwebtoken.sign(
             {
             "token":this.token,
-            "iat":this.creation_date(),
-            "exp":this.exp_date()
+            "iat":this.#creation_date(),
+            "exp":this.#exp_date()
             },CONFIG["secret"]);
         let token = {
             "sig" : this.sig,

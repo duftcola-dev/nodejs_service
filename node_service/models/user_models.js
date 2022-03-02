@@ -71,7 +71,7 @@ class user_model{
     async insert_user(query){
         try {
             if (this.client != undefined ){
-                let result = await this.client.find_one(this.user_db,this.user_col,query);
+                let result = await this.client.insert_one(this.user_db,this.user_col,query);
                 return result;
             }else{
                 throw "ERROR : Add new token to database . No database client defined";

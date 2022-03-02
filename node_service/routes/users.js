@@ -25,7 +25,11 @@ router
         let token_model = model_factory.create_token_model(undefined,mongo_client);
         let result = await token_model.find_token({"token":user_token});
         if (result != null){
-            res = utils.create_response(200,{"access_granted":true},res);
+            if(token_model.is_token_expired(result["exp"]) == true){
+                res = utils.create_response(401,{"token_expired":true},res);
+            }else{
+                res = utils.create_response(200,{"access_granted":true},res);
+            }
         }else{
             res = utils.create_response(403,{"access_granted":false},res);
         }
@@ -50,6 +54,7 @@ router
             res = utils.create_response(422,{"duplicated_item":true},res);
         }else{
             let new_user = user_model.get_data();
+            console.log(new_user);
             let result = await user_model.insert_user(new_user);
             res=utils.create_response(200,result,res);
         } 
@@ -58,7 +63,6 @@ router
     }
     res.send();
 });
-
 
 router
 .route("/access").post( async (req,res) =>{
@@ -73,7 +77,7 @@ router
         let sig = access_model.get_data();
         const query = {"sig":sig};
         let token_model = model_factory.create_token_model(sig,mongo_client);
-        let result = await user_model.find_user(user_db,user_col,query);
+        let result = await user_model.find_user(query);
 
         if (result != null){//user exists
             let current_token = await token_model.find_token(query);
@@ -112,7 +116,6 @@ router
         res=utils.create_response(412,{"error" : "missing params"},res);
     }
     res.send();
-
 })
 
 module.exports = router;
