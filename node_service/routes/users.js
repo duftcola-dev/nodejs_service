@@ -18,14 +18,13 @@ router
     if (await utils.has_required_body_params(required_params,req)==false){
         res=utils.create_response(412,{"error" : "missing params"},res);
         valid = false;
-        res.send()
     }
     if(valid == true){
         let user_token = req.body["token"];
         let token_model = model_factory.create_token_model(undefined,mongo_client);
         let result = await token_model.find_token({"token":user_token});
         if (result != null){
-            if(token_model.is_token_expired(result["exp"]) == true){
+            if(await token_model.is_token_expired(result["exp"]) == true){
                 res = utils.create_response(401,{"token_expired":true},res);
             }else{
                 res = utils.create_response(200,{"access_granted":true},res);

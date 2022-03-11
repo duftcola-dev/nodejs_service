@@ -85,8 +85,8 @@ class token_model{
     async is_token_expired(IEEE_time_POSIX){
         try {
             if(this.client != undefined){
-                let exp = Math.floor(Date.now() / 1000);
-                    if(IEEE_time_POSIX > exp){
+                let iat = Math.floor(Date.now() / 1000);
+                    if(IEEE_time_POSIX < iat){
                         return true;
                     }
                     return false;

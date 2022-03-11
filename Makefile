@@ -13,6 +13,7 @@ install :
 	cd ./node_service ; npm install --save nodemailer
 	cd ./node_service ; npm install --save jsonwebtoken
 	cd ./node_service ; npm install -g npm-check-updates
+	cd .node_service ; npm install --save newman
 	cd ./node_service ; npm install
 	- mkdir ./mongo_volume
 	- mkdir ./mongo_volume/logs
@@ -40,10 +41,9 @@ run :
 down:
 
 	docker-compose down
+shell :
 
-mongo_shell :
-
-	docker exec -it mongodb bash 
+	docker exec -it mongodb_container bash 
 	
 
 
@@ -65,3 +65,11 @@ show:
 
 	docker ps
 	docker ps -a
+
+flush:
+
+	- docker-compose down
+	docker images
+	- docker rm mongodb_container
+	- docker rmi robin/node_service
+	sudo rm -R ./mongo_volume
