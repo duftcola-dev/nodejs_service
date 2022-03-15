@@ -7,12 +7,12 @@ const hostname = os.hostname();
 const port  = CONFIG.app_port;
 
 const users = require("./routes/users");
-const db = require("./routes/db");
+const admin = require("./routes/admin");
 const app = express();
 
 app.use(express.json()); 
 app.use("/node_service/"+CONFIG.api_key+"/users/",users);
-app.use("/node_service/"+CONFIG.api_key+"/admin/",db);
+app.use("/node_service/"+CONFIG.api_key+"/admin/",admin);
 
 app.listen(port , err =>{
     console.log("Server started host:"+hostname+" | port:"+port);

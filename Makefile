@@ -13,7 +13,7 @@ install :
 	cd ./node_service ; npm install --save nodemailer
 	cd ./node_service ; npm install --save jsonwebtoken
 	cd ./node_service ; npm install -g npm-check-updates
-	cd .node_service ; npm install --save newman
+	cd ./node_service  ; npm install --save newman
 	cd ./node_service ; npm install
 	- mkdir ./mongo_volume
 	- mkdir ./mongo_volume/logs
@@ -41,6 +41,7 @@ run :
 down:
 
 	docker-compose down
+	
 shell :
 
 	docker exec -it mongodb_container bash 
@@ -66,10 +67,19 @@ show:
 	docker ps
 	docker ps -a
 
-flush:
+test:
 
+	- newman run ./node_service.postman_collection.json
+
+flush:
+	- rm ./package-lock.json
+	- rm ./package.json
+	- rm ./package.json
 	- docker-compose down
 	docker images
 	- docker rm mongodb_container
 	- docker rmi robin/node_service
-	sudo rm -R ./mongo_volume
+	- sudo rm -R ./mongo_volume
+	- cd ./node_service ; rm -R ./node_modules
+	- cd ./node_service ; rm ./package-lock.json
+	- cd ./node_service ; rm ./package.json

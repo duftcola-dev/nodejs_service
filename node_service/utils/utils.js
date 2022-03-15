@@ -34,12 +34,18 @@ async function has_required_body_params(params,req){
     let data = req.body;
     let result = true;
     try{
-        for (param in params){
-            if (data[params[param]] == undefined){
-                result = false;
-                break;
+        if(params.length > 1){
+            for (param in params){
+                if (data[params[param]] == undefined){
+                    result = false;
+                    break;
+                }
             }
+        }else{
+            if (data[params[0]] == undefined){
+                return false;
         }
+    }
     }catch(err){
         console.log("Checking required body parameters -> missing parameter : "+result);
         result = false;
@@ -49,12 +55,24 @@ async function has_required_body_params(params,req){
 
 
 async function has_required_query_params(params,req){
-    for (item in params){
-        if (req.query[params[item]] == null){
-            return false;
+    let result = true;
+    try{
+        if(params.length > 1){
+            for (item in params){
+                if (req.query[params[item]] == null){
+                    return false;
+                }
+            }
+        }else{
+            if(req.query[params[0]] == null ||  req.query[params[0]] == undefined){
+                return false;
+            }
         }
+    }catch(err){
+        console.log("Checking required query parameters -> missing parameter : "+result);
+        result = false;
     }
-    return true;
+    return result;
     
 }
 

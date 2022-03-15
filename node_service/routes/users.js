@@ -14,12 +14,9 @@ router.use( async function(req,res,next){
 router
 .route("/login").post( async (req,res)=>{
     let required_params=["token"];
-    let valid = true;
-    if (await utils.has_required_body_params(required_params,req)==false){
-        res=utils.create_response(412,{"error" : "missing params"},res);
-        valid = false;
-    }
-    if(valid == true){
+    let valid = await utils.has_required_body_params(required_params,req);
+
+    if (valid == true){
         let user_token = req.body["token"];
         let token_model = model_factory.create_token_model(undefined,mongo_client);
         let result = await token_model.find_token({"token":user_token});
@@ -32,6 +29,8 @@ router
         }else{
             res = utils.create_response(403,{"access_granted":false},res);
         }
+    }else{
+        res=utils.create_response(412,{"error" : "missing params"},res);
     }
     res.send();
 });
@@ -89,21 +88,21 @@ router
                         let data = token_model.get_data();
                         let active_token = await token_model.insert_token(token_db,token_col, data["token"]);
                         if(active_token != null){
-                            res = utils.create_response(200,{"data":data["jwt"]},res);
+                            res = utils.create_response(200,{"data":data["user_token"]},res);
                         }else{
                             res = utils.create_response(412,{"error":"cannot create token / database down"},res);
                         }
                     }
                 }else{//token is not expired
                     let data = await token_model.find_token(query);
-                    let jwt = token_model.refresh_jwt(data);
-                    res = utils.create_response(200,{"data":jwt},res);
+                    let r_token = token_model.refresh_token(data);
+                    res = utils.create_response(200,r_token,res);
                 }
             }else{// user doesnt have a token therefore create  one
                 let data = token_model.get_data();
                 let active_token = await token_model.insert_token(data["token"]);
                 if(active_token != null){
-                    res = utils.create_response(200,{"data":data["jwt"]},res);
+                    res = utils.create_response(200,{"data":data["user_token"]},res);
                 }else{
                     res = utils.create_response(412,{"error":"cannot create token / database down"},res);
                 }

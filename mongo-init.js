@@ -1,13 +1,23 @@
 conn = new Mongo()
 db = connect("mongodb://root:root@localhost:27017/")
 db = db.getSiblingDB('user')
-db.user.insertOne({ok:1})
+db.user.insertOne({            "user_id": this.id,
+"user_name": "test",
+"user_password": "test",
+"sig":"test",
+"user_email":"None",
+"literal_registry_date": 1,
+"iso_date": 1,
+"int_date": 1,
+"services":"None",
+"models": "None"
+})
 db = db.getSiblingDB('tokens')
 db.active.insertOne({
-    "sig" : 1,
-    "token":1,
+    "sig" : "test",
+    "token":"test",
     "iat":1,
-    "exp" :1,
+    "exp" :"None",
 }) 
 db = db.getSiblingDB('admin')
 db.createUser(
