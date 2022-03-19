@@ -3,12 +3,13 @@ const {access_model} = require("./access_model");
 const {ai_model} = require("./ai_models");
 const {token_model} = require("./token_model");
 const {admin_model} = require("./admin_model");
+const {mail_model} = require("./mail_model");
 
 class model_factory{
 
     constructor(){};
 
-    create_user_model(user,pwd,email = undefined,mongo_client = undefined) {
+    create_user_model(user,pwd,email,mongo_client = undefined) {
        return new user_model(user,pwd,email,mongo_client);
     }
 
@@ -26,6 +27,10 @@ class model_factory{
 
     create_admin_model(jwt){
         return new admin_model();
+    }
+
+    create_mail_model(){
+        return new mail_model();
     }
 }
 

@@ -3,7 +3,7 @@ const hasha = require("hasha");
 const jsonwebtoken = require("jsonwebtoken");
 
 class user_model{
-    constructor(user,pwd,email = undefined,mongo_client = undefined){
+    constructor(user,pwd,email,mongo_client = undefined){
         this.id = this.#get_uuid();
         this.user_name=user;
         this.user_password = pwd;
@@ -83,7 +83,7 @@ class user_model{
         }
     }
 
-    get_data(){
+    get_model(){
         let data={
             "user_id": this.id,
             "user_name": this.user_name,

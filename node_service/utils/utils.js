@@ -1,4 +1,5 @@
 const express = require("express");
+const os = require("os");
 
 
 function create_response(status,data,res){
@@ -76,12 +77,21 @@ async function has_required_query_params(params,req){
     
 }
 
-
+function get_app_info(){
+    const app_info = {
+    "host":os.hostname(),
+    "homedir" : os.homedir(),
+    "network" : os.networkInterfaces(),
+    "platform" : os.platform(),
+    }
+    return app_info;
+}
 
 
 module.exports={
     create_response,
     has_required_query_params,
     has_required_body_params,
-    is_iterable
+    is_iterable,
+    get_app_info
     };

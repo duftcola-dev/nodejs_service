@@ -98,7 +98,7 @@ class token_model{
         }
     }
 
-    get_data(){
+    get_model(){
 
         let data = {
             "token" : {

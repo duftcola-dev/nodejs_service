@@ -20,7 +20,7 @@ class admin_model{
         }
     }
 
-    get_data(database,collection,action,result){
+    get_model(database,collection,action,result){
         data = {
             "credentials":"admin",
             "action":action,

@@ -11,6 +11,12 @@ const admin = require("./routes/admin");
 const app = express();
 
 app.use(express.json()); 
+app.get("/node_service/"+CONFIG.api_key+"/status", async (req,res) =>{
+    res.statusCode=200;
+    res.contentType("application/json");
+    res.json({"OK":1});
+    res.send();
+});
 app.use("/node_service/"+CONFIG.api_key+"/users/",users);
 app.use("/node_service/"+CONFIG.api_key+"/admin/",admin);
 

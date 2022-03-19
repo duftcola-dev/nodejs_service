@@ -8,7 +8,7 @@ class ai_model {
         this.data = [];
     }
 
-    get_data(){
+    get_model(){
         let data = {
             "user_name" : this.user_name,
             "model_id" : this.get_uuid(),

@@ -42,10 +42,10 @@ down:
 
 	docker-compose down
 	
-shell :
+console | shell :
 
 	docker exec -it mongodb_container bash 
-	
+
 
 
 install_flask :

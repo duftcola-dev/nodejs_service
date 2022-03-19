@@ -14,7 +14,10 @@
     "db_read_p": "au6stduga63ugi7ai28hi7gua6wge",
     "secret":"qwerty123uhiu123iuihis87s8a",
     "api_key":"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
-    "mail":"duftcoladev@gmail.com",
+    "auth_url": "http//localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/authenticate/",
+    "mail_host":"smtp.gmail.com",
+    "mail_port":465,
+    "mail_user":"duftcoladev@gmail.com",
     "mail_p":"pythontestservice",
     "exp":1200, 
     "db":{
