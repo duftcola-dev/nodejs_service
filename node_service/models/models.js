@@ -29,8 +29,8 @@ class model_factory{
         return new admin_model();
     }
 
-    create_mail_model(){
-        return new mail_model();
+    create_mail_model(sender,receiver,subject,text,html=""){
+        return new mail_model(sender,receiver,subject,text,html);
     }
 }
 

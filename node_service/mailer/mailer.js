@@ -15,8 +15,6 @@ class nodemailer{
         });
     }
 
-    create_message_model()
-
     async send_message(message){
         try{
             const result =  await this.transporter.sendMail(message)

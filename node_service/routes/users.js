@@ -3,6 +3,7 @@ const mongo_client = require("../mongo/mongo");
 const models = require("../models/models");
 const router = express.Router();
 const utils = require("../utils/utils");
+const node_mailer = require("../mailer/mailer");
 const model_factory = new models.model_factory();
 
 router.use( async function(req,res,next){
@@ -51,6 +52,13 @@ router
         }else{
             let new_user = user_model.get_model();
             let result = await user_model.insert_user(new_user);
+            let message = model_factory.create_mail_model(
+                "node_service",
+                user_mail,
+                "authenticate",
+                CONFIG["auth_url"],
+                "");
+            node_mailer.node_mailer.send_message(message);
             res=utils.create_response(200,result,res);
         } 
     }else{
