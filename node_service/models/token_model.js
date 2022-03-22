@@ -85,8 +85,8 @@ class token_model{
     async is_token_expired(IEEE_time_POSIX){
         try {
             if(this.client != undefined){
-                let exp = Math.floor(Date.now() / 1000);
-                    if(IEEE_time_POSIX > exp){
+                let iat = Math.floor(Date.now() / 1000);
+                    if(IEEE_time_POSIX < iat){
                         return true;
                     }
                     return false;
@@ -98,34 +98,23 @@ class token_model{
         }
     }
 
-    get_data(){
-        let new_jwt = jsonwebtoken.sign(
-            {
-            "token":this.token,
-            "iat":this.#creation_date(),
-            "exp":this.#exp_date()
-            },CONFIG["secret"]);
-        let token = {
-            "sig" : this.sig,
-            "token" : this.token,
-            "iat" : this.crt,
-            "exp" : this.exp
-        };
+    get_model(){
+
         let data = {
-            "token" : token,
-            "jwt" : new_jwt
+            "token" : {
+                "sig" : this.sig,
+                "token" : this.token,
+                "iat" : this.crt,
+                "exp" : this.exp
+            },
+            "user_token" : this.token
 
         };
         return data;
     }
 
-    refresh_jwt(data){
-        let refesh_token = jsonwebtoken.sign({
-            "token":data["token"],
-            "iat":data["iat"],
-            "exp":data["exp"]
-            },CONFIG["secret"]);
-        return refesh_token;
+    refresh_token(data){
+        return {"data":data["token"]};
     }
 
 }

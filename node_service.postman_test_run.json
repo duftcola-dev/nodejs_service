@@ -1,0 +1,290 @@
+{
+	"id": "3a16b9f6-af89-4c94-aefd-256657e2cc26",
+	"name": "node_service",
+	"timestamp": "2022-03-15T16:06:55.109Z",
+	"collection_id": "15864958-5e5cd0c9-33a8-4ea9-8a86-7333c7683453",
+	"folder_id": 0,
+	"environment_id": "15864958-2cf96560-879b-4857-a35d-ff32d67b13a7",
+	"totalPass": 12,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "7535482e-6906-4f35-a9d4-1fdd041354bc",
+			"name": "register_user",
+			"url": "http://localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/new_user",
+			"time": 176,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"User registration confirmed": true,
+				"Response time is less than 500ms": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"User registration confirmed": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 500ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				176
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"User registration confirmed": true,
+					"Response time is less than 500ms": true
+				}
+			]
+		},
+		{
+			"id": "857188f2-fbfb-4213-ba12-d96c47d28f5a",
+			"name": "register_duplicated_user",
+			"url": "http://localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/new_user",
+			"time": 43,
+			"responseCode": {
+				"code": 422,
+				"name": "Unprocessable Entity"
+			},
+			"tests": {
+				"Status code is 422": true
+			},
+			"testPassFailCounts": {
+				"Status code is 422": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				43
+			],
+			"allTests": [
+				{
+					"Status code is 422": true
+				}
+			]
+		},
+		{
+			"id": "e675d1d7-26fa-4368-891f-6bc1f4adee4c",
+			"name": "request_access(creates_token)",
+			"url": "http://localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/access",
+			"time": 259,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Token confirmed": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Token confirmed": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				259
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Token confirmed": true
+				}
+			]
+		},
+		{
+			"id": "55314f8b-40f6-4754-ac83-34a088888c97",
+			"name": "request_access_unknown_user",
+			"url": "http://localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/access",
+			"time": 33,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code is 404": true
+			},
+			"testPassFailCounts": {
+				"Status code is 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				33
+			],
+			"allTests": [
+				{
+					"Status code is 404": true
+				}
+			]
+		},
+		{
+			"id": "c06f359d-158e-4fa7-9faa-27058d2449f6",
+			"name": "request_stored_token(same token)",
+			"url": "http://localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/access",
+			"time": 88,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Stored token confirmed": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Stored token confirmed": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				88
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Stored token confirmed": true
+				}
+			]
+		},
+		{
+			"id": "9823f99d-5e43-4bfa-ae03-6754d54e9880",
+			"name": "login",
+			"url": "http://localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/login",
+			"time": 41,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				41
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "0898909f-7aee-4882-8d86-3c213b61a8bc",
+			"name": "login_missing_param",
+			"url": "http://localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/login",
+			"time": 15,
+			"responseCode": {
+				"code": 412,
+				"name": "Precondition Failed"
+			},
+			"tests": {
+				"Status code is 412 missing params": true
+			},
+			"testPassFailCounts": {
+				"Status code is 412 missing params": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status code is 412 missing params": true
+				}
+			]
+		},
+		{
+			"id": "41ccb7f2-c5c0-4f6b-929f-0c808accc936",
+			"name": "login_wrong_user_token",
+			"url": "http://localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/login",
+			"time": 30,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code is 404, user not found": true
+			},
+			"testPassFailCounts": {
+				"Status code is 404, user not found": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				30
+			],
+			"allTests": [
+				{
+					"Status code is 404, user not found": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 685,
+	"collection": {
+		"requests": [
+			{
+				"id": "7535482e-6906-4f35-a9d4-1fdd041354bc",
+				"method": "POST"
+			},
+			{
+				"id": "857188f2-fbfb-4213-ba12-d96c47d28f5a",
+				"method": "POST"
+			},
+			{
+				"id": "e675d1d7-26fa-4368-891f-6bc1f4adee4c",
+				"method": "POST"
+			},
+			{
+				"id": "55314f8b-40f6-4754-ac83-34a088888c97",
+				"method": "POST"
+			},
+			{
+				"id": "c06f359d-158e-4fa7-9faa-27058d2449f6",
+				"method": "POST"
+			},
+			{
+				"id": "9823f99d-5e43-4bfa-ae03-6754d54e9880",
+				"method": "POST"
+			},
+			{
+				"id": "0898909f-7aee-4882-8d86-3c213b61a8bc",
+				"method": "POST"
+			},
+			{
+				"id": "41ccb7f2-c5c0-4f6b-929f-0c808accc936",
+				"method": "POST"
+			}
+		]
+	}
+}

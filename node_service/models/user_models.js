@@ -1,8 +1,9 @@
 const uuidv4 = require("uuid");
 const hasha = require("hasha");
+const jsonwebtoken = require("jsonwebtoken");
 
 class user_model{
-    constructor(user,pwd,email = undefined,mongo_client = undefined){
+    constructor(user,pwd,email,mongo_client = undefined){
         this.id = this.#get_uuid();
         this.user_name=user;
         this.user_password = pwd;
@@ -12,6 +13,7 @@ class user_model{
         this.iso_date=this.#get_iso_date();
         this.int_date=this.#get_int_date();
         this.models=[];
+        this.services=[];
         this.client = mongo_client;
         this.user_db =  this.#get_database();
         this.user_col = this.#get_collection("user"); 
@@ -81,7 +83,7 @@ class user_model{
         }
     }
 
-    get_data(){
+    get_model(){
         let data={
             "user_id": this.id,
             "user_name": this.user_name,
@@ -91,6 +93,7 @@ class user_model{
             "literal_registry_date": this.literal_registry_date,
             "iso_date": this.iso_date,
             "int_date": this.int_date,
+            "services":this.services,
             "models": this.models
         }
         return data;

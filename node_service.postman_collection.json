@@ -1,0 +1,1547 @@
+{
+	"info": {
+		"_postman_id": "5e5cd0c9-33a8-4ea9-8a86-7333c7683453",
+		"name": "node_service",
+		"description": "Back-end application composed by several services.\n\n*   node_service : Service responsible for user registry , user validation and granting access to the rest pf services.\n*   flask_service: Service responsible for web crawling , fetching and storing data for the users.\n*   fast_api_service : Service responsible for creating the models , storing the models and returning their output",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json()",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    console.log(\"Registering user\")",
+							"});",
+							"pm.test(\"User registration confirmed\",function(){",
+							"    pm.expect(response.acknowledged).to.equal(true);",
+							"})",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\" : \"test_user\",\n    \"user_pwd\" : \"password\",\n    \"user_email\":\"test_user@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{node_service_url}}{{node_service_api_key}}users/new_user",
+					"host": [
+						"{{node_service_url}}{{node_service_api_key}}users"
+					],
+					"path": [
+						"new_user"
+					]
+				},
+				"description": "User registration . Users are registered in the database . The registry of the user and the creation of the user token are two different steps .\n\nThe token is only created and stored when access to the services of the application is demanded . Registering the user alone does not grant access to the services of the app."
+			},
+			"response": [
+				{
+					"name": "register_user",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_name\" : \"test_user\",\n    \"user_pwd\" : \"password\",\n    \"user_email\":\"test_user@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/new_user",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"node_service",
+								"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
+								"users",
+								"new_user"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "0",
+							"value": "c"
+						},
+						{
+							"key": "1",
+							"value": "o"
+						},
+						{
+							"key": "2",
+							"value": "n"
+						},
+						{
+							"key": "3",
+							"value": "t"
+						},
+						{
+							"key": "4",
+							"value": "e"
+						},
+						{
+							"key": "5",
+							"value": "n"
+						},
+						{
+							"key": "6",
+							"value": "t"
+						},
+						{
+							"key": "7",
+							"value": "-"
+						},
+						{
+							"key": "8",
+							"value": "t"
+						},
+						{
+							"key": "9",
+							"value": "y"
+						},
+						{
+							"key": "10",
+							"value": "p"
+						},
+						{
+							"key": "11",
+							"value": "e"
+						},
+						{
+							"key": "12",
+							"value": ""
+						},
+						{
+							"key": "13",
+							"value": ":"
+						},
+						{
+							"key": "14",
+							"value": ""
+						},
+						{
+							"key": "15",
+							"value": "j"
+						},
+						{
+							"key": "16",
+							"value": "s"
+						},
+						{
+							"key": "17",
+							"value": "o"
+						},
+						{
+							"key": "18",
+							"value": "n"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "61"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"3d-hfkFKawFRsWYZpTr86F09t75oQo\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 11 Mar 2022 20:58:40 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"acknowledged\": true,\n    \"insertedId\": \"622bb800c6b941bcb07bb552\"\n}"
+				}
+			]
+		},
+		{
+			"name": "register_duplicated_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 422\", function () {",
+							"    pm.response.to.have.status(422);",
+							"    console.log(\"Duplicated user detected, aborting registration\")",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\" : \"test_user\",\n    \"user_pwd\" : \"password\",\n    \"user_email\":\"test_user@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{node_service_url}}{{node_service_api_key}}users/new_user",
+					"host": [
+						"{{node_service_url}}{{node_service_api_key}}users"
+					],
+					"path": [
+						"new_user"
+					]
+				},
+				"description": "Users can only be registered once. Duplicated user names are not allowed."
+			},
+			"response": [
+				{
+					"name": "duplicated_user",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_name\" : \"test_user\",\n    \"user_pwd\" : \"password\",\n    \"user_email\":\"test_user@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/new_user",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"node_service",
+								"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
+								"users",
+								"new_user"
+							]
+						}
+					},
+					"status": "Unprocessable Entity",
+					"code": 422,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "0",
+							"value": "c"
+						},
+						{
+							"key": "1",
+							"value": "o"
+						},
+						{
+							"key": "2",
+							"value": "n"
+						},
+						{
+							"key": "3",
+							"value": "t"
+						},
+						{
+							"key": "4",
+							"value": "e"
+						},
+						{
+							"key": "5",
+							"value": "n"
+						},
+						{
+							"key": "6",
+							"value": "t"
+						},
+						{
+							"key": "7",
+							"value": "-"
+						},
+						{
+							"key": "8",
+							"value": "t"
+						},
+						{
+							"key": "9",
+							"value": "y"
+						},
+						{
+							"key": "10",
+							"value": "p"
+						},
+						{
+							"key": "11",
+							"value": "e"
+						},
+						{
+							"key": "12",
+							"value": ""
+						},
+						{
+							"key": "13",
+							"value": ":"
+						},
+						{
+							"key": "14",
+							"value": ""
+						},
+						{
+							"key": "15",
+							"value": "j"
+						},
+						{
+							"key": "16",
+							"value": "s"
+						},
+						{
+							"key": "17",
+							"value": "o"
+						},
+						{
+							"key": "18",
+							"value": "n"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "24"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"18-5xBJCr3y9pZlVRiIDtUi0Nd3Co4\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 11 Mar 2022 20:58:55 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"duplicated_item\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "request_access(creates_token)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jwtSecret = pm.environment.get('jwt_secret') || ''",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Token confirmed\",function(){",
+							"    let jsondata = pm.response.json();",
+							"    pm.expect(jsondata).to.have.property(\"data\");",
+							"    pm.environment.set(\"access_token\", jsondata.data);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\" : \"test_user\",\n    \"user_pwd\" : \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{node_service_url}}{{node_service_api_key}}users/access",
+					"host": [
+						"{{node_service_url}}{{node_service_api_key}}users"
+					],
+					"path": [
+						"access"
+					]
+				},
+				"description": "Requesting access token from existing user in order to access the services of the app."
+			},
+			"response": [
+				{
+					"name": "response_access(creates_token)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_name\" : \"test_user\",\n    \"user_pwd\" : \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/access",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"node_service",
+								"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
+								"users",
+								"access"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "0",
+							"value": "c"
+						},
+						{
+							"key": "1",
+							"value": "o"
+						},
+						{
+							"key": "2",
+							"value": "n"
+						},
+						{
+							"key": "3",
+							"value": "t"
+						},
+						{
+							"key": "4",
+							"value": "e"
+						},
+						{
+							"key": "5",
+							"value": "n"
+						},
+						{
+							"key": "6",
+							"value": "t"
+						},
+						{
+							"key": "7",
+							"value": "-"
+						},
+						{
+							"key": "8",
+							"value": "t"
+						},
+						{
+							"key": "9",
+							"value": "y"
+						},
+						{
+							"key": "10",
+							"value": "p"
+						},
+						{
+							"key": "11",
+							"value": "e"
+						},
+						{
+							"key": "12",
+							"value": ""
+						},
+						{
+							"key": "13",
+							"value": ":"
+						},
+						{
+							"key": "14",
+							"value": ""
+						},
+						{
+							"key": "15",
+							"value": "j"
+						},
+						{
+							"key": "16",
+							"value": "s"
+						},
+						{
+							"key": "17",
+							"value": "o"
+						},
+						{
+							"key": "18",
+							"value": "n"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "139"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"8b-BpckM7v187yz6vE6hsOyi+Q3Ilg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 15 Mar 2022 14:22:36 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "{\n    \"data\": \"23530422bc6a67bbefda064dce54013eb3465b339f64ac7769cbf55b1d48c932c3a8947e4b70f3da0a09b9831b2e94d4d9923e31c035e25f85370c173bb4ea3b\"\n}"
+				}
+			]
+		},
+		{
+			"name": "request_access_unknown_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"    const response = pm.response.json();",
+							"    pm.response.to.have.jsonBody(\"error\");",
+							"    pm.expect(response.error).to.be.a(\"string\");",
+							"    pm.expect(response.error).to.equal(\"User not found\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\" : \"test_user1\",\n    \"user_pwd\" : \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{node_service_url}}{{node_service_api_key}}users/access",
+					"host": [
+						"{{node_service_url}}{{node_service_api_key}}users"
+					],
+					"path": [
+						"access"
+					]
+				},
+				"description": "Requesting access for are non existing user will return error."
+			},
+			"response": [
+				{
+					"name": "user_not_found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_name\" : \"test_user_12\",\n    \"user_pwd\" : \"password1231\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/access",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"node_service",
+								"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
+								"users",
+								"access"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "0",
+							"value": "c"
+						},
+						{
+							"key": "1",
+							"value": "o"
+						},
+						{
+							"key": "2",
+							"value": "n"
+						},
+						{
+							"key": "3",
+							"value": "t"
+						},
+						{
+							"key": "4",
+							"value": "e"
+						},
+						{
+							"key": "5",
+							"value": "n"
+						},
+						{
+							"key": "6",
+							"value": "t"
+						},
+						{
+							"key": "7",
+							"value": "-"
+						},
+						{
+							"key": "8",
+							"value": "t"
+						},
+						{
+							"key": "9",
+							"value": "y"
+						},
+						{
+							"key": "10",
+							"value": "p"
+						},
+						{
+							"key": "11",
+							"value": "e"
+						},
+						{
+							"key": "12",
+							"value": ""
+						},
+						{
+							"key": "13",
+							"value": ":"
+						},
+						{
+							"key": "14",
+							"value": ""
+						},
+						{
+							"key": "15",
+							"value": "j"
+						},
+						{
+							"key": "16",
+							"value": "s"
+						},
+						{
+							"key": "17",
+							"value": "o"
+						},
+						{
+							"key": "18",
+							"value": "n"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "26"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1a-hq/hT0ORGTkTfyRpVCZ/JB/r8Eg\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 11 Mar 2022 21:39:00 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "{\n    \"error\": \"User not found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "request_stored_token(same token)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Stored token confirmed\",function(){",
+							"    let jsondata = pm.response.json();",
+							"    pm.expect(jsondata).to.have.property(\"data\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\" : \"test_user\",\n    \"user_pwd\" : \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{node_service_url}}{{node_service_api_key}}users/access",
+					"host": [
+						"{{node_service_url}}{{node_service_api_key}}users"
+					],
+					"path": [
+						"access"
+					]
+				},
+				"description": "Requesting access token stored in the database . Tokens have an expiration time. Once the token is expired the user session is deleted and and another access token needs to be demanded."
+			},
+			"response": [
+				{
+					"name": "response_stored_token(same token)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_name\" : \"test_user\",\n    \"user_pwd\" : \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/access",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"node_service",
+								"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
+								"users",
+								"access"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "0",
+							"value": "c"
+						},
+						{
+							"key": "1",
+							"value": "o"
+						},
+						{
+							"key": "2",
+							"value": "n"
+						},
+						{
+							"key": "3",
+							"value": "t"
+						},
+						{
+							"key": "4",
+							"value": "e"
+						},
+						{
+							"key": "5",
+							"value": "n"
+						},
+						{
+							"key": "6",
+							"value": "t"
+						},
+						{
+							"key": "7",
+							"value": "-"
+						},
+						{
+							"key": "8",
+							"value": "t"
+						},
+						{
+							"key": "9",
+							"value": "y"
+						},
+						{
+							"key": "10",
+							"value": "p"
+						},
+						{
+							"key": "11",
+							"value": "e"
+						},
+						{
+							"key": "12",
+							"value": ""
+						},
+						{
+							"key": "13",
+							"value": ":"
+						},
+						{
+							"key": "14",
+							"value": ""
+						},
+						{
+							"key": "15",
+							"value": "j"
+						},
+						{
+							"key": "16",
+							"value": "s"
+						},
+						{
+							"key": "17",
+							"value": "o"
+						},
+						{
+							"key": "18",
+							"value": "n"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "139"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"8b-BpckM7v187yz6vE6hsOyi+Q3Ilg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 15 Mar 2022 14:22:57 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "{\n    \"data\": \"23530422bc6a67bbefda064dce54013eb3465b339f64ac7769cbf55b1d48c932c3a8947e4b70f3da0a09b9831b2e94d4d9923e31c035e25f85370c173bb4ea3b\"\n}"
+				}
+			]
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\" : \"{{access_token}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{node_service_url}}{{node_service_api_key}}users/login",
+					"host": [
+						"{{node_service_url}}{{node_service_api_key}}users"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Login in to the app using the granted token . The token data is stored in postman environment variables and it is not shown here for safety reasons."
+			},
+			"response": [
+				{
+					"name": "login_successfull",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\" : \"c722ceb9265939b8e16fc6431ef9689bae43f48ac2da21288b8624895dd83c8c53737f0e329ee396f90bd77db8cb16727793a3273370d0413ba8b30f87ee250e\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"node_service",
+								"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
+								"users",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "0",
+							"value": "c"
+						},
+						{
+							"key": "1",
+							"value": "o"
+						},
+						{
+							"key": "2",
+							"value": "n"
+						},
+						{
+							"key": "3",
+							"value": "t"
+						},
+						{
+							"key": "4",
+							"value": "e"
+						},
+						{
+							"key": "5",
+							"value": "n"
+						},
+						{
+							"key": "6",
+							"value": "t"
+						},
+						{
+							"key": "7",
+							"value": "-"
+						},
+						{
+							"key": "8",
+							"value": "t"
+						},
+						{
+							"key": "9",
+							"value": "y"
+						},
+						{
+							"key": "10",
+							"value": "p"
+						},
+						{
+							"key": "11",
+							"value": "e"
+						},
+						{
+							"key": "12",
+							"value": ""
+						},
+						{
+							"key": "13",
+							"value": ":"
+						},
+						{
+							"key": "14",
+							"value": ""
+						},
+						{
+							"key": "15",
+							"value": "j"
+						},
+						{
+							"key": "16",
+							"value": "s"
+						},
+						{
+							"key": "17",
+							"value": "o"
+						},
+						{
+							"key": "18",
+							"value": "n"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "23"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"17-Q0W8Zkg9YjP/2vows+HQ0683xP8\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 15 Mar 2022 15:03:41 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "{\n    \"access_granted\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "login_missing_param",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 412 missing params\", function () {",
+							"    pm.response.to.have.status(412);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data\" : \"The rifht param is token\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{node_service_url}}{{node_service_api_key}}users/login",
+					"host": [
+						"{{node_service_url}}{{node_service_api_key}}users"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Login with blank parameters with cause an error."
+			},
+			"response": [
+				{
+					"name": "login_wrong_param",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\" : \"c722ceb9265939b8e16fc6431ef9689bae43f48ac2da21288b8624895dd83c8c53737f0e329ee396f90bd77db8cb16727793a3273370d0413ba8b30f8\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"node_service",
+								"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
+								"users",
+								"login"
+							]
+						}
+					},
+					"status": "Precondition Failed",
+					"code": 412,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "0",
+							"value": "c"
+						},
+						{
+							"key": "1",
+							"value": "o"
+						},
+						{
+							"key": "2",
+							"value": "n"
+						},
+						{
+							"key": "3",
+							"value": "t"
+						},
+						{
+							"key": "4",
+							"value": "e"
+						},
+						{
+							"key": "5",
+							"value": "n"
+						},
+						{
+							"key": "6",
+							"value": "t"
+						},
+						{
+							"key": "7",
+							"value": "-"
+						},
+						{
+							"key": "8",
+							"value": "t"
+						},
+						{
+							"key": "9",
+							"value": "y"
+						},
+						{
+							"key": "10",
+							"value": "p"
+						},
+						{
+							"key": "11",
+							"value": "e"
+						},
+						{
+							"key": "12",
+							"value": ""
+						},
+						{
+							"key": "13",
+							"value": ":"
+						},
+						{
+							"key": "14",
+							"value": ""
+						},
+						{
+							"key": "15",
+							"value": "j"
+						},
+						{
+							"key": "16",
+							"value": "s"
+						},
+						{
+							"key": "17",
+							"value": "o"
+						},
+						{
+							"key": "18",
+							"value": "n"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "26"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1a-F8xp+I/DKsl0mJNAvvuZRb5CkOI\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 15 Mar 2022 15:04:44 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "{\n    \"error\": \"missing params\"\n}"
+				}
+			]
+		},
+		{
+			"name": "login_wrong_user_token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404, user not found\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\" : \"something something the dark side\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{node_service_url}}{{node_service_api_key}}users/login",
+					"host": [
+						"{{node_service_url}}{{node_service_api_key}}users"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Login with wrong token parameters will reject the authentication."
+			},
+			"response": [
+				{
+					"name": "login_failed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\" : \"c722ceb9265939b8e16fc6431ef9689bae43f48ac2da21288b8624895dd83c8c53737f0e329ee396f90bd77db8cb16727793a3273370d0413ba8b30f8\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/node_service/qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/users/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"node_service",
+								"qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd",
+								"users",
+								"login"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "0",
+							"value": "c"
+						},
+						{
+							"key": "1",
+							"value": "o"
+						},
+						{
+							"key": "2",
+							"value": "n"
+						},
+						{
+							"key": "3",
+							"value": "t"
+						},
+						{
+							"key": "4",
+							"value": "e"
+						},
+						{
+							"key": "5",
+							"value": "n"
+						},
+						{
+							"key": "6",
+							"value": "t"
+						},
+						{
+							"key": "7",
+							"value": "-"
+						},
+						{
+							"key": "8",
+							"value": "t"
+						},
+						{
+							"key": "9",
+							"value": "y"
+						},
+						{
+							"key": "10",
+							"value": "p"
+						},
+						{
+							"key": "11",
+							"value": "e"
+						},
+						{
+							"key": "12",
+							"value": ""
+						},
+						{
+							"key": "13",
+							"value": ":"
+						},
+						{
+							"key": "14",
+							"value": ""
+						},
+						{
+							"key": "15",
+							"value": "j"
+						},
+						{
+							"key": "16",
+							"value": "s"
+						},
+						{
+							"key": "17",
+							"value": "o"
+						},
+						{
+							"key": "18",
+							"value": "n"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "24"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"18-7YPP7/NN/ITEn9divmZWVOAoTWg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 15 Mar 2022 15:04:16 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "{\n    \"access_granted\": false\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "node_service_url",
+			"value": "localhost:3000/node_service/"
+		},
+		{
+			"key": "node_service_api_key",
+			"value": "qw_e8_r7t8w9837_6384yw_873_6wuwy_eduyewyd/"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "jwt",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

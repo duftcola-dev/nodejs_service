@@ -6,7 +6,7 @@ class access_model{
         this.sig = this.#get_sig(user+pwd);
     }
 
-    get_data(){
+    get_model(){
         return this.sig;
     }
 
